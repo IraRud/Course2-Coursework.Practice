@@ -15,9 +15,11 @@ public class Main {
                     int menu = scanner.nextInt();
                     switch (menu) {
                         case 1:
+                            scanner.nextLine();
                             TaskService.addTask(scanner);
                             break;
                         case 2:
+                            scanner.nextLine();
                             TaskService.getAllByDate(scanner);
                             break;
                         case 3:

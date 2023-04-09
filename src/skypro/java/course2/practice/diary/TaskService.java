@@ -18,7 +18,6 @@ abstract public class TaskService {
     // добавить задачу
     public static void addTask(Scanner scanner) {
         try {
-            scanner.nextLine();
             System.out.println("Введите название задачи:");
             String title = ValidateUtils.checkString(scanner.nextLine());
 
@@ -34,22 +33,26 @@ abstract public class TaskService {
                 LocalDateTime dateTime = LocalDateTime.parse(scanner.nextLine(), DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
                 // создаем и добавляем в акутальный список задачу
                 createTask(title, description, type, dateTime, scanner);
+                scanner.nextLine();
 
                 // завершение добавления задачи
-                System.out.print("Для выхода нажмите Enter. Для добавления еще одной задачи введите \"+\": ");
+                System.out.println("Для выхода нажмите Enter. Для добавления еще одной задачи введите \"+\". ");
+                String str = scanner.nextLine();
                 // проверка, что введен не Enter. В противном случае работа завершена
-                if (Objects.equals(scanner.next(), "+")) {
+                if (str.trim().equalsIgnoreCase("+")) {
                     addTask(scanner);
                 }
-            // ловим ошибку при вводе даты
+//                else {
+//                    scanner.nextLine();
+//                }
+                // ловим ошибку при вводе даты
             } catch (DateTimeParseException e) {
                 System.out.println("ОШИБКА: Неверный формат даты. Задача не добавлена.");
-                return;
+
             }
         // ловим ошибку при вводе названия, заголовка, типа задачи
         } catch (IncorrectArgumentException e) {
             System.out.println(e.getMessage() + " Задача не добавлена.");
-            return;
         }
     }
 
@@ -91,7 +94,6 @@ abstract public class TaskService {
         // ловим ошибку при вводе названия, заголовка, типа задачи
         } catch (IncorrectArgumentException e) {
             System.out.println(e.getMessage() + " Задача не создана.");
-            return;
         }
     }
 
@@ -113,7 +115,6 @@ abstract public class TaskService {
     // обработать полученные задачи на день (работа интерфейса с пользователем)
     public static void getAllByDate(Scanner scanner) {
         try {
-            scanner.nextLine();
             isActualTasksEmpty(actualTasks);
             try {
                 System.out.println("На какой день необходимо проверить запланированные задачи?\n" +
@@ -127,19 +128,20 @@ abstract public class TaskService {
                 // сообщение пользователю
                 if (!allTasksByDate.isEmpty()) {
                     System.out.println("Список задач на " + userDateTime.toLocalDate() + ":");
-                    System.out.println(allTasksByDate);
+                    allTasksByDate.stream()
+                                    .forEach(System.out::println);
                 } else {
                     System.out.println("На " + userDateTime.toLocalDate() + " задач не запланированно.");
                 }
+                System.out.println("Для выхода нажмите Enter.");
+                scanner.nextLine();
             // ловим ошибку при вводе даты
             } catch (DateTimeParseException e) {
                 System.out.println("ОШИБКА: Неверный формат даты. Поиск не может быть осуществлен.");
-                return;
             }
         // ловим ошибку при пустом списке задач
         } catch (TaskNotFoundException e) {
             System.out.println(e.getMessage());
-            return;
         }
     }
 

@@ -59,7 +59,7 @@ abstract public  class Task {
 
     @Override
     public String toString() {
-        return "\nid: " + id + "\nНазвание: " + title + "\nОписание: " + description + "\nТип задачи: " + type +
+        return "id: " + id + "\nНазвание: " + title + "\nОписание: " + description + "\nТип задачи: " + type +
                 "; время создания: " + dateTime +"; повторяемость: ";
     }
 
