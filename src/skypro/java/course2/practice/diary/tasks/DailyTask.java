@@ -2,6 +2,7 @@ package skypro.java.course2.practice.diary.tasks;
 
 import skypro.java.course2.practice.exception.IncorrectArgumentException;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 // ежедневная задача
@@ -13,12 +14,12 @@ public class DailyTask extends Task {
 
     // всегда истина, так как ежедневные задачи будут выполнятся в любую дату
     @Override
-    public boolean isPresentIn(LocalDateTime userDateTime) {
+    public boolean isPresentIn(LocalDate userDate) {
         return true;
     }
 
     @Override
     public String toString() {
-        return super.toString() + "ежедневная";
+        return super.toString() + "; повторяемость: ежедневная";
     }
 }

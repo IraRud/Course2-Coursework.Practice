@@ -3,6 +3,7 @@ package skypro.java.course2.practice.diary.tasks;
 import skypro.java.course2.practice.exception.IncorrectArgumentException;
 import skypro.java.course2.practice.validate_utils.ValidateUtils;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -25,7 +26,7 @@ abstract public  class Task {
         this.id = ++idGenerator;
     }
 
-    public abstract boolean isPresentIn(LocalDateTime userDateTime);
+    public abstract boolean isPresentIn(LocalDate userDate);
 
     public Integer getId() {
         return id;
@@ -60,7 +61,7 @@ abstract public  class Task {
     @Override
     public String toString() {
         return "id: " + id + "\nНазвание: " + title + "\nОписание: " + description + "\nТип задачи: " + type +
-                "; время создания: " + dateTime +"; повторяемость: ";
+                "; время создания: " + dateTime;
     }
 
     // задачи считаются одинаковыми в случае, если совпадают время создания и id

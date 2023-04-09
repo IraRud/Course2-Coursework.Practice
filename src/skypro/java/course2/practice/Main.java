@@ -23,7 +23,9 @@ public class Main {
                             TaskService.getAllByDate(scanner);
                             break;
                         case 3:
-
+                            scanner.nextLine();
+                            TaskService.removeTask(scanner);
+                            break;
                         case 0:
                             break label;
                     }

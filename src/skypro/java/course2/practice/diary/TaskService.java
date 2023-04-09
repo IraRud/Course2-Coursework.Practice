@@ -5,6 +5,7 @@ import skypro.java.course2.practice.exception.IncorrectArgumentException;
 import skypro.java.course2.practice.exception.TaskNotFoundException;
 import skypro.java.course2.practice.validate_utils.ValidateUtils;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -35,16 +36,14 @@ abstract public class TaskService {
                 createTask(title, description, type, dateTime, scanner);
                 scanner.nextLine();
 
-                // завершение добавления задачи
-                System.out.println("Для выхода нажмите Enter. Для добавления еще одной задачи введите \"+\". ");
+                // завершение добавления задачи (выор дальнейшего действия)
+                System.out.println("\nДля выхода нажмите Enter. Для добавления еще одной задачи введите \"+\". ");
                 String str = scanner.nextLine();
-                // проверка, что введен не Enter. В противном случае работа завершена
+                // проверка, что введен "+". В противном случае работа завершена
                 if (str.trim().equalsIgnoreCase("+")) {
                     addTask(scanner);
                 }
-//                else {
-//                    scanner.nextLine();
-//                }
+
                 // ловим ошибку при вводе даты
             } catch (DateTimeParseException e) {
                 System.out.println("ОШИБКА: Неверный формат даты. Задача не добавлена.");
@@ -103,37 +102,37 @@ abstract public class TaskService {
     }
 
     // получить задачи на день (возвращает задачи в виде коллекции)
-    public static Collection<Task> getAllByDate(LocalDateTime userDateTime) {
+    private static Collection<Task> getAllByDate(LocalDate userDate) {
         // создаем стрим
         return actualTasks.values().stream()
                 // фильтруем на основе введенной даты
-                .filter(task -> task.isPresentIn(userDateTime))
+                .filter(task -> task.isPresentIn(userDate))
                 // выводим в консоль
                 .collect(Collectors.toList());
     }
 
-    // обработать полученные задачи на день (работа интерфейса с пользователем)
+    // обработать полученные задачи на день (работа с пользователем, вызов в main)
     public static void getAllByDate(Scanner scanner) {
         try {
+            // проверка на существование задач в ежеденевнике
             isActualTasksEmpty(actualTasks);
             try {
                 System.out.println("На какой день необходимо проверить запланированные задачи?\n" +
-                        "Введите дату в формате dd.MM.yyyy HH:mm (например: 18.05.2023 21:23):");
+                        "Введите дату в формате dd.MM.yyyy (например: 18.05.2023):");
                 // приводим дату к нужному формату
-                LocalDateTime userDateTime = LocalDateTime.parse(scanner.nextLine(), DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
+                LocalDate userDate = LocalDate.parse(scanner.nextLine(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 
                 // получаем коллекцию из задач на день
-                Collection<Task> allTasksByDate = getAllByDate(userDateTime);
+                Collection<Task> allTasksByDate = getAllByDate(userDate);
 
                 // сообщение пользователю
                 if (!allTasksByDate.isEmpty()) {
-                    System.out.println("Список задач на " + userDateTime.toLocalDate() + ":");
-                    allTasksByDate.stream()
-                                    .forEach(System.out::println);
+                    System.out.println("Список задач на " + userDate + ":");
+                    allTasksByDate.forEach(System.out::println);
                 } else {
-                    System.out.println("На " + userDateTime.toLocalDate() + " задач не запланированно.");
+                    System.out.println("На " + userDate + " задач не запланированно.");
                 }
-                System.out.println("Для выхода нажмите Enter.");
+                System.out.println("\nДля выхода нажмите Enter.");
                 scanner.nextLine();
             // ловим ошибку при вводе даты
             } catch (DateTimeParseException e) {
@@ -150,10 +149,50 @@ abstract public class TaskService {
         if (!map.isEmpty()) {
             return map;
         } else {
-            throw new TaskNotFoundException("ОШИБКА: Список запланированных задач пуст.");
+            throw new TaskNotFoundException("ОШИБКА: Пока ежедневник пуст.");
         }
     }
 
-//    public static void remove
+
+    // удалить задачу по id (возвращает удаленную задачу)
+    private static Task removeTask(int id) {
+        return actualTasks.remove(id);
+    }
+
+    // вывести удаленную задачу (работа с пользователем, вызов в main)
+    public static void removeTask(Scanner scanner) {
+        try {
+            // проверка на существование задач в ежеденевнике
+            isActualTasksEmpty(actualTasks);
+            System.out.println("Введите id задачи, которую необходимо удалить: ");
+            int id = isIdExist(scanner.nextInt());
+
+            // удаляем задачу
+            Task task = removeTask(id);
+            System.out.println("Задача \"" + task.getTitle() + "\" была удалена.");
+            scanner.nextLine();
+
+            // завершение удаления задачи (выор дальнейшего действия)
+            System.out.println("\nДля выхода нажмите Enter. Для удаления еще одной задачи введите \"-\". ");
+            String str = scanner.nextLine();
+            // проверка, что введен "-". В противном случае работа завершена
+            if (str.trim().equalsIgnoreCase("-")) {
+                removeTask(scanner);
+            }
+
+        // ловим ошибку при пустом списке задач
+        } catch (TaskNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    // проверить, что id существует
+    private static int isIdExist(int id) throws TaskNotFoundException {
+        if (actualTasks.containsKey(id)) {
+            return id;
+        } else {
+            throw new TaskNotFoundException("ОШИБКА: задачи с таким id не существует.");
+        }
+    }
 
 }
