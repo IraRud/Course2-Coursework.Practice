@@ -1,4 +1,4 @@
-package skypro.java.course2.practice.task;
+package skypro.java.course2.practice.diary.tasks;
 
 import skypro.java.course2.practice.exception.IncorrectArgumentException;
 
@@ -15,5 +15,10 @@ public class DailyTask extends Task {
     @Override
     public boolean isPresentIn(LocalDateTime userDateTime) {
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + "ежедневная";
     }
 }

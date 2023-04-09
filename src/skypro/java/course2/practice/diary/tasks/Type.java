@@ -1,4 +1,4 @@
-package skypro.java.course2.practice.task;
+package skypro.java.course2.practice.diary.tasks;
 
 // тип задачи (перечисление)
 public enum Type {

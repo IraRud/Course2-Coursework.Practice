@@ -1,4 +1,4 @@
-package skypro.java.course2.practice.task;
+package skypro.java.course2.practice.diary.tasks;
 
 import skypro.java.course2.practice.exception.IncorrectArgumentException;
 import skypro.java.course2.practice.validate_utils.ValidateUtils;
@@ -59,8 +59,8 @@ abstract public  class Task {
 
     @Override
     public String toString() {
-        return " id: " + id + ". " + title + ".\nОписание: " + description + ".\nВремя создания: " + type +
-                "; тип задачи: " + dateTime+ ", повторяемость: ";
+        return "\nid: " + id + "\nНазвание: " + title + "\nОписание: " + description + "\nТип задачи: " + type +
+                "; время создания: " + dateTime +"; повторяемость: ";
     }
 
     // задачи считаются одинаковыми в случае, если совпадают время создания и id

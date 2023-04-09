@@ -1,4 +1,4 @@
-package skypro.java.course2.practice.task;
+package skypro.java.course2.practice.diary.tasks;
 
 import skypro.java.course2.practice.exception.IncorrectArgumentException;
 
@@ -17,5 +17,10 @@ public class YearlyTask extends Task{
     public boolean isPresentIn(LocalDateTime userDateTime) {
         return (getDateTime().getDayOfMonth() == userDateTime.getDayOfMonth() &&
                 getDateTime().getMonth() == userDateTime.getMonth());
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + "ежегодная";
     }
 }

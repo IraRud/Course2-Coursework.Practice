@@ -1,9 +1,11 @@
 package skypro.java.course2.practice.validate_utils;
 
 import skypro.java.course2.practice.exception.IncorrectArgumentException;
-import skypro.java.course2.practice.task.Type;
+import skypro.java.course2.practice.diary.tasks.Type;
 
-import static skypro.java.course2.practice.task.Type.*;
+import java.util.Scanner;
+
+import static skypro.java.course2.practice.diary.tasks.Type.*;
 
 // класс для проверки вводимых полей задачи
 public class ValidateUtils {
@@ -15,8 +17,9 @@ public class ValidateUtils {
             return str;
         } else {
             // выбрасываем ошибку
-            throw new IncorrectArgumentException("Некорректное значение текстового поля!");
+            throw new IncorrectArgumentException("ОШИБКА: Поле не может быть пустым.");
         }
+
     }
 
     // отдельная проверка типа задачи (возвращаем тип задачи)
@@ -24,10 +27,10 @@ public class ValidateUtils {
         Type type;
         if (str.trim().equalsIgnoreCase("личная")) {
             return type = PERSONAL;
-        } else if (str.trim().equalsIgnoreCase("рабочая")) {
+        } else if (str.equalsIgnoreCase("рабочая")) {
             return type = WORK;
         } else {
-            throw new IncorrectArgumentException("Некорректное значение типа задачи!");
+            throw new IncorrectArgumentException("ОШИБКА: Некорректное значение типа задачи.");
         }
     }
 }

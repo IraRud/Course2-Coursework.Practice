@@ -1,4 +1,4 @@
-package skypro.java.course2.practice.task;
+package skypro.java.course2.practice.diary.tasks;
 
 import skypro.java.course2.practice.exception.IncorrectArgumentException;
 
@@ -14,6 +14,11 @@ public class OneTimeTask extends Task {
     // истина, если дата создания задачи совпадает с датой, введенной пользователем
     @Override
     public boolean isPresentIn(LocalDateTime userDateTime) {
-        return (getDateTime().toLocalTime().equals(userDateTime.toLocalTime()));
+        return (getDateTime().toLocalDate().equals(userDateTime.toLocalDate()));
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + "однократная";
     }
 }
