@@ -28,30 +28,28 @@ abstract public class TaskService {
             System.out.println("Введите тип задачи (личная/рабочая):");
             Type type = ValidateUtils.checkType(scanner.nextLine());
 
-            try {
-                System.out.println("Введите дату в формате dd.MM.yyyy HH:mm (например: 18.05.2023 21:23): ");
-                // приводим дату к нужному формату
-                LocalDateTime dateTime = LocalDateTime.parse(scanner.nextLine(), DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
-                // создаем и добавляем в акутальный список задачу
-                createTask(title, description, type, dateTime, scanner);
-                scanner.nextLine();
+            System.out.println("Введите дату в формате dd.MM.yyyy HH:mm (например: 18.05.2023 21:23): ");
+            // приводим дату к нужному формату
+            LocalDateTime dateTime = LocalDateTime.parse(scanner.nextLine(), DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
+            // создаем и добавляем в акутальный список задачу
+            createTask(title, description, type, dateTime, scanner);
+            scanner.nextLine();
 
-                // завершение добавления задачи (выор дальнейшего действия)
-                System.out.println("\nДля выхода нажмите Enter. Для добавления еще одной задачи введите \"+\". ");
-                String str = scanner.nextLine();
-                // проверка, что введен "+". В противном случае работа завершена
-                if (str.trim().equalsIgnoreCase("+")) {
-                    addTask(scanner);
-                }
-
-                // ловим ошибку при вводе даты
-            } catch (DateTimeParseException e) {
-                System.out.println("ОШИБКА: Неверный формат даты. Задача не добавлена.");
-
+            // завершение добавления задачи (выор дальнейшего действия)
+            System.out.println("\nДля выхода нажмите Enter. Для добавления еще одной задачи введите \"+\". ");
+            String str = scanner.nextLine();
+            // проверка, что введен "+". В противном случае работа завершена
+            if (str.trim().equalsIgnoreCase("+")) {
+                addTask(scanner);
             }
+
+        // ловим ошибку при вводе даты
+        } catch (DateTimeParseException dateTimeParseException) {
+            System.out.println("ОШИБКА: Неверный формат даты. Задача не добавлена.");
+        }
         // ловим ошибку при вводе названия, заголовка, типа задачи
-        } catch (IncorrectArgumentException e) {
-            System.out.println(e.getMessage() + " Задача не добавлена.");
+        catch (IncorrectArgumentException incorrectArgumentException) {
+            System.out.println(incorrectArgumentException.getMessage() + " Задача не добавлена.");
         }
     }
 
@@ -116,30 +114,31 @@ abstract public class TaskService {
         try {
             // проверка на существование задач в ежеденевнике
             isActualTasksEmpty(actualTasks);
-            try {
-                System.out.println("На какой день необходимо проверить запланированные задачи?\n" +
-                        "Введите дату в формате dd.MM.yyyy (например: 18.05.2023):");
-                // приводим дату к нужному формату
-                LocalDate userDate = LocalDate.parse(scanner.nextLine(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+            System.out.println("На какой день необходимо проверить запланированные задачи?\n" +
+                    "Введите дату в формате dd.MM.yyyy (например: 18.05.2023):");
 
-                // получаем коллекцию из задач на день
-                Collection<Task> allTasksByDate = getAllByDate(userDate);
+            // приводим дату к нужному формату
+            LocalDate userDate = LocalDate.parse(scanner.nextLine(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 
-                // сообщение пользователю
-                if (!allTasksByDate.isEmpty()) {
-                    System.out.println("Список задач на " + userDate + ":");
-                    allTasksByDate.forEach(System.out::println);
-                } else {
-                    System.out.println("На " + userDate + " задач не запланированно.");
-                }
-                System.out.println("\nДля выхода нажмите Enter.");
-                scanner.nextLine();
-            // ловим ошибку при вводе даты
-            } catch (DateTimeParseException e) {
-                System.out.println("ОШИБКА: Неверный формат даты. Поиск не может быть осуществлен.");
+            // получаем коллекцию из задач на день
+            Collection<Task> allTasksByDate = getAllByDate(userDate);
+
+            // сообщение пользователю
+            if (!allTasksByDate.isEmpty()) {
+                System.out.println("Список задач на " + userDate + ":");
+                allTasksByDate.forEach(System.out::println);
+            } else {
+                System.out.println("На " + userDate + " задач не запланированно.");
             }
+            System.out.println("\nДля выхода нажмите Enter.");
+            scanner.nextLine();
+            // ловим ошибку при вводе даты
+        } catch (DateTimeParseException e) {
+
+            System.out.println("ОШИБКА: Неверный формат даты. Поиск не может быть осуществлен.");
+        }
         // ловим ошибку при пустом списке задач
-        } catch (TaskNotFoundException e) {
+        catch (TaskNotFoundException e) {
             System.out.println(e.getMessage());
         }
     }
